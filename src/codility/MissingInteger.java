@@ -22,11 +22,12 @@ public class MissingInteger {
 
     static class Solution {
         public int solution(int[] A) {
-            int[] intList = IntStream.of(A).filter(e -> e > 0).sorted().toArray();
+            Arrays.sort(A);
             int prev = 0;
             int answer = 1;
 
-            for (final int curr : intList) {
+            for (final int curr : A) {
+                if (curr <= 0) continue;
                 if (prev != curr) {
                     if (curr != answer) {
                         break;
