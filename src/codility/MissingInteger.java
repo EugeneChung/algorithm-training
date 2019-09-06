@@ -10,8 +10,8 @@ import java.util.stream.IntStream;
 public class MissingInteger {
     public static void main(String[] args) {
         int[] A =
-            { 1, 3, 6, 4, 1, 2 }
-            //{ 1, 2, 3 }
+            //{ 1, 3, 6, 4, 1, 2 }
+            { 1, 2, 3 }
             //{ -1, -3 }
             //{1, 3, 1, 3, 2, 1, 3}
             //{1, 3, 2}
@@ -22,15 +22,18 @@ public class MissingInteger {
 
     static class Solution {
         public int solution(int[] A) {
-            List<Integer> intList = IntStream.of(A).filter(e -> e > 0).boxed().collect(Collectors.toSet()).
-                stream().sorted().collect(Collectors.toList());
+            int[] intList = IntStream.of(A).filter(e -> e > 0).sorted().toArray();
+            int prev = 0;
             int answer = 1;
 
-            for (final int val : intList) {
-                if (val != answer) {
-                    break;
-                } else {
-                    answer += 1;
+            for (final int curr : intList) {
+                if (prev != curr) {
+                    if (curr != answer) {
+                        break;
+                    } else {
+                        answer += 1;
+                        prev = curr;
+                    }
                 }
             }
 
