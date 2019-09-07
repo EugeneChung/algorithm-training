@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class GenomicRangeQuery {
     public static void main(String[] args) {
         String S =
-            //"CAGCCTA"
+//            "CAGCCTA"
 //            "A"
             "TTG"
             ;
@@ -26,29 +26,42 @@ public class GenomicRangeQuery {
     }
 
     static class Solution {
-        private int getImpactFactor(char type) {
-            switch (type) {
-                case 'A': return 1;
-                case 'C': return 2;
-                case 'G': return 3;
-                case 'T': return 4;
-                default: return 0;
-            }
-        }
-
         public int[] solution(String S, int[] P, int[] Q) {
+            int[][] prefixCounts = new int[3][S.length() + 1];
             int[] minFactors = new int[P.length];
+
+            for (int i = 0; i < S.length(); i++) {
+                char c = S.charAt(i);
+                int A = 0, C = 0, G = 0;
+
+                if (c == 'A') {
+                    A = 1;
+                } else if (c == 'C') {
+                    C = 1;
+                } else if (c == 'G') {
+                    G = 1;
+                }
+                prefixCounts[0][i + 1] = prefixCounts[0][i] + A;
+                prefixCounts[1][i + 1] = prefixCounts[1][i] + C;
+                prefixCounts[2][i + 1] = prefixCounts[2][i] + G;
+            }
 
             for (int i = 0; i < P.length; i++) {
                 int pCommand = P[i];
                 int qCommand = Q[i];
 
-                char[] subSequence = S.substring(pCommand, qCommand + 1).toCharArray();
-                Arrays.sort(subSequence);
-                minFactors[i] = getImpactFactor(subSequence[0]);
+                if (prefixCounts[0][qCommand + 1] - prefixCounts[0][pCommand] > 0) {
+                    minFactors[i] = 1;
+                } else if (prefixCounts[1][qCommand + 1] - prefixCounts[1][pCommand] > 0) {
+                    minFactors[i] = 2;
+                } else if (prefixCounts[2][qCommand + 1] - prefixCounts[2][pCommand] > 0) {
+                    minFactors[i] = 3;
+                } else {
+                    minFactors[i] = 4;
+                }
             }
 
             return minFactors;
-        } 
+        }
     }
 }
