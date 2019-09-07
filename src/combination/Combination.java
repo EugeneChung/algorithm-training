@@ -7,16 +7,13 @@ public class Combination {
         Combination ex = new Combination();
         int[] arr = {1, 2, 3};
         int n = arr.length;
-        int r = n;
-        int[] combArr = new int[n];
+        int r = 2;
+        int[] combArr = new int[r];
 
         ex.doCombination(combArr, n, r, 0, 0, arr);
     }
 
     public void doCombination(int[] combArr, int n, int r, int index, int target, int[] arr) {
-        //System.out.println("=> "+n+" "+r+" "+index+" "+target);
-
-        // r ==0 이란 것은 뽑을 원소를 다 뽑았다는 뜻.
         if (r == 0) {
             System.out.println(Arrays.toString(combArr));
             for (int i = 0; i < index; i++) System.out.print(arr[combArr[i]] + " ");
