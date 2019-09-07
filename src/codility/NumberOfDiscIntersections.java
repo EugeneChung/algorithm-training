@@ -7,11 +7,11 @@ import java.util.Arrays;
 public class NumberOfDiscIntersections {
     public static void main(String[] args) {
         int [] P =
-//            {1, 5, 2, 1, 4, 0}
+            {1, 5, 2, 1, 4, 0}
 //            {0}
 //            {0, 1}
 //            {5, 10, 8}
-            {1, 1, 1}
+//            {1, 1, 1}
 //            {1, -1, 1}
             ;
         Object solution = new Solution().solution(P);
@@ -34,12 +34,12 @@ public class NumberOfDiscIntersections {
             for (int i = 0; i < A.length - 1; i++) {
                 long radius = A[i];
                 long R = i + radius;
-                long count = Arrays.binarySearch(L, R + 1);
+                long count = Arrays.binarySearch(L, R + 1L);
                 if (count < 0) {
-                    count = -count - 1;
+                    count = -count - 1L;
                 }
-                //TestHelper.log(count);
-                answer += count - 1 - i;
+                TestHelper.log(count);
+                answer += count - 1L - (long)i;
             }
             if (answer > 10000000) {
                 return -1;
