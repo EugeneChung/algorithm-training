@@ -4,17 +4,25 @@ import java.util.Arrays;
 
 public class TestHelper {
     public static void printSolution(Object solution) {
-        if (solution.getClass().isArray()) {
-            if (solution instanceof int[])
-                System.out.println(Arrays.toString((int[]) solution));
-            else if (solution instanceof long[])
-                System.out.println(Arrays.toString((long[]) solution));
-            else if (solution instanceof boolean[])
-                System.out.println(Arrays.toString((boolean[]) solution));
+        printArray(solution);
+    }
+
+    public static void printArray(Object array) {
+        if (array.getClass().isArray()) {
+            if (array instanceof int[])
+                log(Arrays.toString((int[]) array));
+            else if (array instanceof long[])
+                log(Arrays.toString((long[]) array));
+            else if (array instanceof boolean[])
+                log(Arrays.toString((boolean[]) array));
             else
-                System.out.println(Arrays.toString((Object[]) solution));
+                log(Arrays.toString((Object[]) array));
         } else {
-            System.out.println(solution);
+            log(array.toString());
         }
+    }
+
+    public static void log(Object message) {
+        System.out.println(message);
     }
 }
