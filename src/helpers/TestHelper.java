@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public class TestHelper {
     public static void printSolution(Object solution) {
+        log("-- Solution --");
         printArray(solution);
     }
 
