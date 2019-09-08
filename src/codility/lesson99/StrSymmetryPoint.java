@@ -1,4 +1,4 @@
-package codility;
+package codility.lesson99;
 
 import helpers.TestHelper;
 
