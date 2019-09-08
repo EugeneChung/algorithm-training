@@ -10,11 +10,11 @@ public class Dominator {
 //            {3, 4, 3, 2, 3, -1, 3, 3}
 //            {0}
 //            {0, 1}
-            {0, 0}
+//            {0, 0}
 //            {5, 10, 8}
 //            {1, 1, 1}
 //            {1, -1, 1}
-//            {0, 0, 1, 0, 0}
+            {0, 0, 1, 0, 0}
             ;
         Object solution = new Solution().solution(P);
         TestHelper.printSolution(solution);
@@ -27,23 +27,34 @@ public class Dominator {
 
             final int half = A.length >> 1;
 
-            int dominatorIndex = -1;
-            int dominatorCount = 0;
-            Map<Integer, Integer> occurrenceMap = new HashMap<>();
-
+            int lastValue = -1;
+            int size = 0;
             for (int i = 0; i < A.length; i++) {
-                int num = A[i];
-                int count = occurrenceMap.compute(num, (k, v) -> (v == null) ? 1 : v + 1);
-                if (dominatorCount < count) {
-                    dominatorCount = count;
-                    dominatorIndex = i;
-                    if (dominatorCount > half) {
+                if (size == 0) {
+                    size++;
+                    lastValue = A[i];
+                } else {
+                    if (lastValue != A[i]) size--;
+                    else size++;
+                }
+            }
+            if (size == 0) {
+                return -1;
+            }
+
+            int candidate = lastValue;
+            int count = 0;
+            int answer = -1;
+            for (int i = 0; i < A.length; i++) {
+                if (candidate == A[i]) {
+                    count++;
+                    if (count > half) {
+                        answer = i;
                         break;
                     }
                 }
             }
-            if (dominatorCount > half) return dominatorIndex;
-            else return -1;
+            return answer;
         }
     }
 }
