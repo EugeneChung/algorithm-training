@@ -2,9 +2,6 @@ package codility;
 
 import helpers.TestHelper;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class CountFactors {
     public static void main(String[] args) {
         int N =
@@ -15,20 +12,20 @@ public class CountFactors {
     }
 
     static class Solution {
-        public int solution(int N) {
+        public int solution(long N) {
             if (N == 1) return 1;
-            Set<Integer> factors = new HashSet<>();
-            for (int i = 1; i <= N; i++) {
-                if (factors.contains(i)) {
-                    break;
-                }
+            int count = 0;
+            long i = 1;
+            while (i * i < N) {
                 if (N % i == 0) {
-                    factors.add(i);
-                    factors.add(N / i);
+                    count += 2;
                 }
+                i++;
             }
-            //TestHelper.log(factors);
-            return factors.size();
+            if (i * i == N) {
+                count += 1;
+            }
+            return count;
         }
     }
 }
