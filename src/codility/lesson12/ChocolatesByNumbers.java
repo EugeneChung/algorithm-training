@@ -24,22 +24,20 @@ public class ChocolatesByNumbers {
     }
 
     static class Solution {
+        private int gcd(int N, int M) {
+            int mod = N % M;
+            if (mod == 0) {
+                return M;
+            } else {
+                return gcd(M, mod);
+            }
+        }
+
         public int solution(int N, int M) {
             if (N == 1) return 1;
 
-            int ateChocolateCount = 1;
-            int currentChocolate = 0;
-
-            do {
-                int nextChocolate = (currentChocolate + M) % N;
-                if (nextChocolate == 0) {
-                    break;
-                }
-                currentChocolate = nextChocolate;
-                ateChocolateCount++;
-            } while (true);
-
-            return ateChocolateCount;
+            int gcd = gcd(N, M);
+            return N / gcd;
         }
     }
 }
