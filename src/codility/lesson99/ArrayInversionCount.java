@@ -2,92 +2,75 @@ package codility.lesson99;
 
 import helpers.TestHelper;
 
-import java.util.*;
-
 public class ArrayInversionCount {
     public static void main(String[] args) {
         int[] A =
             {-1, 6, 3, 4, 7, 4}
 //            {3, 3}
-//            {100, 150}
-//            {1, 1}
+//            {1, 2}
+//            {2, 1}
+//            {5, 4, 3, 2, 1, 0}
             ;
         Object solution = new Solution().solution(A);
         TestHelper.printSolution(solution);
     }
 
     static class Solution {
-        private class Pair {
-            int lower;
-            int higher;
+        private int count;
 
-            Pair(int lower, int higher) {
-                this.lower = lower;
-                this.higher = higher;
-            }
-
-            @Override
-            public boolean equals(Object o) {
-                if (this == o) return true;
-                if (o == null || getClass() != o.getClass()) return false;
-                Pair pair = (Pair) o;
-                return lower == pair.lower &&
-                    higher == pair.higher;
-            }
-
-            @Override
-            public int hashCode() {
-                return Objects.hash(lower, higher);
-            }
-        }
-        private class InversionCounter {
-            int counter;
-            Set<Pair> pairs = new HashSet<>();
-        }
         private class OverflowException extends RuntimeException {
         }
 
-        private class Element implements Comparable<Element> {
-            final int index;
-            final int value;
-            private final InversionCounter counter;
-
-            private Element(int index, int value, InversionCounter counter) {
-                this.index = index;
-                this.value = value;
-                this.counter = counter;
+        private void mergeSort(int[] a) {
+            final int n = a.length;
+            if (n < 2) {
+                return;
             }
+            int mid = n / 2;
+            int[] l = new int[mid];
+            int[] r = new int[n - mid];
 
-            @Override
-            public int compareTo(Element o) {
-                int compare = Integer.compare(this.value, o.value);
-                if (this.index > o.index && compare < 0) {
-                    Pair pair = new Pair(o.index, this.index);
-                    if (counter.pairs.add(pair)) {
-                        counter.counter++;
-                        if (counter.counter > 1_000_000_000) {
-                            throw new OverflowException();
-                        }
-                    }
+            System.arraycopy(a, 0, l, 0, mid);
+            System.arraycopy(a, mid, r, 0, n - mid);
+
+            mergeSort(l);
+            mergeSort(r);
+
+            merge(a, l, r);
+        }
+
+        private void merge(int[] arr, int[] l, int[] r) {
+            final int left = l.length;
+            final int right = r.length;
+            int i = 0, j = 0, k = 0;
+
+            while (i < left && j < right) {
+                if (l[i] <= r[j]) {
+                    arr[k++] = l[i++];
+                } else {
+                    count += (left + j) - k;
+                    if (count > 1_000_000_000) throw new OverflowException();
+                    arr[k++] = r[j++];
                 }
-                return compare;
+            }
+            while (i < left) {
+                arr[k++] = l[i++];
+            }
+            while (j < right) {
+                arr[k++] = r[j++];
             }
         }
 
         public int solution(int[] A) {
             if (A.length < 2) return 0;
 
-            InversionCounter counter = new InversionCounter();
-            List<Element> elementList = new ArrayList<>();
-            for (int i = 0; i < A.length; i++) {
-                elementList.add(new Element(i, A[i], counter));
-            }
             try {
-                Collections.sort(elementList);
+                mergeSort(A);
             } catch (OverflowException e) {
                 return -1;
             }
-            return counter.counter;
+
+            return count;
         }
     }
 }
