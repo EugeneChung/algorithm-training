@@ -11,11 +11,11 @@ public class CountDistinctSlice {
             ;
         int[] A =
 //            {3, 4, 5, 5, 2}
-//            {3, 3}
+            {1, 2, 3, 4, 1, 3, 4}
 //            {100, 150}
 //            {0, 1}
 //            {0, 1, 0}
-            {3, 2, 1}
+//            {3, 2, 1}
             ;
         Object solution = new Solution().solution(M, A);
         TestHelper.printSolution(solution);
@@ -24,31 +24,18 @@ public class CountDistinctSlice {
     static class Solution {
         public int solution(int M, int[] A) {
             if (A.length == 1) return 1;
-
-            final int maxIndex = A.length - 1;
-            int answer = A.length;
+            int[] nextPositions = new int[M + 1];
             int left = 0;
-            int right = 0;
-            Set<Integer> uniqueSlice = new HashSet<>();
-            uniqueSlice.add(A[0]);
+            int answer = 0;
 
-            while (left < maxIndex) {
-                if (right < maxIndex && uniqueSlice.add(A[right + 1])) {
-                    right++;
-                    if (uniqueSlice.size() > 1) {
-                        answer++;
-                    }
-                } else {
-                    uniqueSlice.remove(A[left]);
-                    left++;
-                    if (left != right && uniqueSlice.size() > 1) {
-                        answer++;
-                    }
+            for (int right = 0; right < A.length; right++) {
+                if (nextPositions[A[right]] > left) {
+                    left = nextPositions[A[right]];
                 }
-//                TestHelper.log("left=" + left + ", right=" + right + ", slice=" + uniqueSlice);
+                nextPositions[A[right]] = right + 1;
+                answer += right - left + 1;
                 if (answer > 1_000_000_000) return 1_000_000_000;
             }
-
             return answer;
         }
     }
