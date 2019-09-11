@@ -25,10 +25,14 @@ public class EquiLeader {
 
     static class Solution {
         private int electLeader(Map<Integer, Integer> numToCount, int leaderOrMaxSoFar, int index, int value, int half, int[] output) {
-            int count = numToCount.compute(value, (k, v) -> {
+            /*int count = numToCount.compute(value, (k, v) -> {
                 if (v == null) return 1;
                 else return v + 1;
-            });
+            });*/
+            Integer count = numToCount.getOrDefault(value, 0);
+            count = count + 1;
+            numToCount.put(value, count);
+
             int leaderCount = numToCount.getOrDefault(leaderOrMaxSoFar, 0);
 
             if (count > leaderCount) {
