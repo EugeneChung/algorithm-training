@@ -30,6 +30,9 @@ public class NumberOfDiscIntersections {
                 R[i] = i + radius;
             }
             Arrays.sort(L);
+            Arrays.sort(R);
+            TestHelper.printArray(L);
+            TestHelper.printArray(R);
 
             long answer = 0;
             for (int i = 0; i < A.length; i++) {
@@ -41,10 +44,11 @@ public class NumberOfDiscIntersections {
                         count++;
                     }
                 }
+                //TestHelper.log(count);
                 answer += count - 1L - (long)i;
-            }
-            if (answer > 10000000) {
-                return -1;
+                if (answer > 10000000) {
+                    return -1;
+                }
             }
             return (int)answer;
         }
