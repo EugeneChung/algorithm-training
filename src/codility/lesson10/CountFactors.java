@@ -5,7 +5,8 @@ import helpers.TestHelper;
 public class CountFactors {
     public static void main(String[] args) {
         int N =
-            2_147_483_647
+            9
+//            2_147_483_647
             ;
         Object solution = new Solution().solution(N);
         TestHelper.printSolution(solution);
@@ -22,7 +23,7 @@ public class CountFactors {
                 }
                 i++;
             }
-            if (i * i == N) {
+            if (N % i == 0) {
                 count += 1;
             }
             return count;
