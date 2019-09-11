@@ -4,60 +4,45 @@ import helpers.TestHelper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class EquiLeader {
     public static void main(String[] args) {
         int [] P =
 //            {4, 3, 4, 4, 4, 2}
-            {3, 4, 3, 2, 3, -1, 3, 3}
+//            {3, 4, 3, 2, 3, -1, 3, 3}
 //            {0}
 //            {0, 1}
 //            {0, 0}
 //            {5, 10, 8}
 //            {1, 1, 1}
 //            {1, -1, 1}
-//            {0, 0, 1, 0, 0}
+            {0, 0, 1, 0, 0}
             ;
         Object solution = new Solution().solution(P);
         TestHelper.printSolution(solution);
     }
 
     static class Solution {
-        /* return the index of the leader */
-        private int electLeader(int[] A, int from, int to) {
-            if (from == to) return from;
+        private int electLeader(Map<Integer, Integer> numToCount, int leaderOrMaxSoFar, int index, int value, int half, int[] output) {
+            int count = numToCount.compute(value, (k, v) -> {
+                if (v == null) return 1;
+                else return v + 1;
+            });
+            int leaderCount = numToCount.getOrDefault(leaderOrMaxSoFar, 0);
 
-            final int half = (to - from + 1) >> 1;
-
-            int lastValue = -1;
-            int size = 0;
-            for (int i = from; i <= to; i++) {
-                if (size == 0) {
-                    size++;
-                    lastValue = A[i];
-                } else {
-                    if (lastValue != A[i]) size--;
-                    else size++;
-                }
+            if (count > leaderCount) {
+                leaderCount = count;
+                leaderOrMaxSoFar = value;
             }
-            if (size == 0) {
-                return -1;
+            if (leaderCount > half) {
+                output[index] = leaderOrMaxSoFar;
+            } else {
+                output[index] = NO_LEADER;
             }
-
-            int candidate = lastValue;
-            int count = 0;
-            int answer = -1;
-            for (int i = from; i <= to; i++) {
-                if (candidate == A[i]) {
-                    count++;
-                    if (count > half) {
-                        answer = i;
-                        break;
-                    }
-                }
-            }
-            return answer;
+            return leaderOrMaxSoFar;
         }
+
         private static final int NO_LEADER = Integer.MAX_VALUE;
         public int solution(int[] A) {
             if (A.length == 1) return 0;
@@ -65,27 +50,27 @@ public class EquiLeader {
                 if (A[0] == A[1]) return 1;
                 else return 0;
             }
-            //TestHelper.log(electLeader(new int[]{4, 3, 4}, 0, 2));
+
+            Map<Integer, Integer> numToCount = new HashMap<>();
+            int leaderOrMaxSoFar = NO_LEADER;
 
             int[] prefixLeaders = new int[A.length];
-            int[] suffixLeaders = new int[A.length];
-
             for (int i = 0; i < A.length; i++) {
-                int leaderIdx = electLeader(A, 0, i);
-                if (leaderIdx >= 0) prefixLeaders[i] = A[leaderIdx];
-                else prefixLeaders[i] = NO_LEADER;
+                leaderOrMaxSoFar = electLeader(numToCount, leaderOrMaxSoFar, i, A[i], (i + 1) / 2, prefixLeaders);
             }
+
+            int[] suffixLeaders = new int[A.length];
+            numToCount.clear();
+            leaderOrMaxSoFar = NO_LEADER;
             for (int i = A.length - 1, j = 0; i >= 0; i--, j++) {
-                int leaderIdx = electLeader(A, i, A.length - 1);
-                if (leaderIdx >= 0) suffixLeaders[j] = A[leaderIdx];
-                else suffixLeaders[j] = NO_LEADER;
+                leaderOrMaxSoFar = electLeader(numToCount, leaderOrMaxSoFar, i, A[i], (j + 1) / 2, suffixLeaders);
             }
-            //TestHelper.printArray(prefixLeaders);
-            //TestHelper.printArray(suffixLeaders);
+//            TestHelper.printArray(prefixLeaders);
+//            TestHelper.printArray(suffixLeaders);
 
             int equiLeader = 0;
             for (int S = 0; S < A.length - 1; S++) {
-                if (prefixLeaders[S] != NO_LEADER && prefixLeaders[S] == suffixLeaders[A.length - (S + 2)]) {
+                if (prefixLeaders[S] != NO_LEADER && prefixLeaders[S] == suffixLeaders[S + 1]) {
                     equiLeader++;
                 }
             }
