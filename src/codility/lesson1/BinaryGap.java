@@ -34,7 +34,7 @@ public class BinaryGap {
                 } else {
                     if (startCount) currentGap++;
                 }
-                next = next / 2;
+                next = next >> 1;
             }
 
             return longestGap;
