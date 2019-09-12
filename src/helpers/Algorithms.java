@@ -1,5 +1,7 @@
 package helpers;
 
+import codility.lesson10.NonDivisors;
+
 public class Algorithms {
     public static void main(String[] s) {
         int[] actual = { 5, 1, 6, 2, 3, 4 };
@@ -89,4 +91,35 @@ public class Algorithms {
 
         return isPrime;
     }
+
+    public static int maxInArray(int... array) {
+        int max = array[0];
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] > max) {
+                max = array[i];
+            }
+        }
+        return max;
+    }
+
+    public static class Element implements Comparable<Element> {
+        final int index;
+        final int value;
+
+        Element(int index, int value) {
+            this.index = index;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "A[" + index + "]=" + value;
+        }
+
+        @Override
+        public int compareTo(Element o) {
+            return Integer.compare(this.value, o.value);
+        }
+    }
+
 }
