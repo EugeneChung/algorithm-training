@@ -5,6 +5,7 @@ public class Algorithms {
         int[] actual = { 5, 1, 6, 2, 3, 4 };
         mergeSort(actual);
         TestHelper.printArray(actual);
+        TestHelper.log(binaryGCD(200, 120));
     }
 
     public static void mergeSort(int[] a) {
@@ -44,5 +45,26 @@ public class Algorithms {
         while (j < right) {
             arr[k++] = r[j++];
         }
+    }
+
+    public static int binaryGCD(int p, int q) {
+        //https://introcs.cs.princeton.edu/java/23recursion/BinaryGCD.java.html
+        if (q == 0) return p;
+        if (p == 0) return q;
+
+        // p and q even
+        if ((p & 1) == 0 && (q & 1) == 0) return binaryGCD(p >> 1, q >> 1) << 1;
+
+            // p is even, q is odd
+        else if ((p & 1) == 0) return binaryGCD(p >> 1, q);
+
+            // p is odd, q is even
+        else if ((q & 1) == 0) return binaryGCD(p, q >> 1);
+
+            // p and q odd, p >= q
+        else if (p >= q) return binaryGCD((p - q) >> 1, q);
+
+            // p and q odd, p < q
+        else return binaryGCD(p, (q - p) >> 1);
     }
 }
