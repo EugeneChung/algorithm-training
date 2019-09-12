@@ -8,9 +8,11 @@ import java.util.*;
 public class FibFrog {
     public static void main(String[] args) {
         int[] A =
-//            {0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0}
-//            {1}
-            {0, 0, 0}
+            {1, 0, 0} // 2
+//            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} // 3
+//            {0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0} // 3
+//            {1} // 1
+//            {0, 0, 0} //-1
             ;
 
         Object solution = new Solution().solution(A);
@@ -18,7 +20,7 @@ public class FibFrog {
     }
 
     static class Solution {
-        private List<BigInteger> buildFiboList(BigInteger limit) {
+        private Set<BigInteger> buildFiboSet(BigInteger limit) {
             List<BigInteger> fiboList = new ArrayList<>(Arrays.asList(
                 BigInteger.valueOf(0L), BigInteger.valueOf(1L))
             );
@@ -33,73 +35,51 @@ public class FibFrog {
                 }
             }
 
-            return fiboList;
+            return new HashSet<>(fiboList);
         }
 
         public int solution(int[] A) {
             if (A.length == 0) return -1;
 
-            List<BigInteger> fiboList = buildFiboList(BigInteger.valueOf(A.length));
-
-            int distance = A.length + 1;
-            int jumps = 0;
-            int position = -1;
-
-            // 바로 N으로 뛸 수 있는지 체크
-            int loc = Collections.binarySearch(fiboList, BigInteger.valueOf(distance));
-            if (loc >= 0) {
-                return 1;
-            }
-
-            List<Integer> leafList = new ArrayList<>();
-            for (int i = A.length - 1; i >= 0; i--) {
-                distance--;
-
+            Set<BigInteger> fiboSet = buildFiboSet(BigInteger.valueOf(A.length));
+            List<Integer> jumpList = new ArrayList<>();
+            for (int i = 0; i < A.length; i++) {
                 if (A[i] == 1) {
-                    loc = Collections.binarySearch(fiboList, BigInteger.valueOf(distance));
-                    if (loc >= 0) {
-//                        TestHelper.log("Current distance=" + distance + ", position=" + position);
-                        position = i;
-                        distance = A.length - position;
-//                        TestHelper.log("Next distance=" + distance + ", position=" + position);
-                        jumps++;
-                        break;
-                    } else {
-                        leafList.add(i);
-                    }
+                    jumpList.add(i);
                 }
             }
+            jumpList.add(A.length);
+//            TestHelper.log(jumpList);
 
-            // 바로 N으로 뛸 수 있는지 체크
-            loc = Collections.binarySearch(fiboList, BigInteger.valueOf(distance));
-            if (loc >= 0) {
-                return jumps + 1;
-            }
+            int curpos = -1;
+            int tarpos = A.length;
+            int jumpListLowerLimit = -1;
+            int jumpListIndex = jumpList.size() - 1;
+            int answer = 0; //jmps
 
-            for (int i = 0; i < leafList.size(); i++) {
-                int nextLeaf = leafList.get(i);
-                distance = nextLeaf - position;
+            while (curpos != tarpos) {
+                int distance = tarpos - curpos;
 
-                loc = Collections.binarySearch(fiboList, BigInteger.valueOf(distance));
-                if (loc >= 0) {
-                    jumps++;
-                    position = nextLeaf;
-                    distance = A.length - position;
-                    leafList.remove(i);
-                    i = 0;
+//                TestHelper.log("curpos=" + curpos + ", tarpos=" + tarpos + ", distance=" + distance + ", jumpListLowerLimit=" + jumpListLowerLimit);
 
-                    // 바로 N으로 뛸 수 있는지 체크
-                    loc = Collections.binarySearch(fiboList, BigInteger.valueOf(distance));
-                    if (loc >= 0) {
-                        jumps++;
-                        position = A.length;
+                if (fiboSet.contains(BigInteger.valueOf(distance))) {
+                    jumpListLowerLimit = jumpListIndex;
+                    jumpListIndex = jumpList.size() - 1;
+                    curpos = tarpos;
+                    answer++;
+                } else {
+                    jumpListIndex--;
+                    if (jumpListIndex <= jumpListLowerLimit) {
                         break;
                     }
                 }
+                tarpos = jumpList.get(jumpListIndex);
             }
 
-            if (jumps == 0 || position < A.length) return -1;
-            return jumps;
+            if (curpos != tarpos || answer == 0) {
+                return -1;
+            }
+            return answer;
         }
     }
 }
