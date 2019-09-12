@@ -21,29 +21,25 @@ public class MaxDoubleSliceSum {
             int maxEndingLeft = 0;
             int maxEndingRight = 0;
 
-            List<Integer> maxEndingFromLeftList = new ArrayList<>(A.length);
-            List<Integer> maxEndingFromRightList = new ArrayList<>(A.length);
+            int[] maxEndingFromLeftList = new int[A.length];
+            int[] maxEndingFromRightList = new int[A.length];
 
-            maxEndingFromLeftList.add(0); // for empty slice (X=0, Y=1)
             for (int i = 1; i < A.length - 1; i++) {
                 maxEndingLeft = Math.max(0, maxEndingLeft + A[i]);
-                maxEndingFromLeftList.add(maxEndingLeft);
+                maxEndingFromLeftList[i] = maxEndingLeft;
             }
-            maxEndingFromLeftList.add(0); // for empty slice (Y=N-2, Z=N-1)
 
-            maxEndingFromRightList.add(0, 0);
-            for (int j = A.length - 2; j > 0; j--) {
-                maxEndingRight = Math.max(0, maxEndingRight + A[j]);
-                maxEndingFromRightList.add(0, maxEndingRight);
+            for (int i = A.length - 2; i > 0; i--) {
+                maxEndingRight = Math.max(0, maxEndingRight + A[i]);
+                maxEndingFromRightList[i] = maxEndingRight;
             }
-            maxEndingFromRightList.add(0, 0);
-//            TestHelper.log(maxEndingFromLeftList);
-//            TestHelper.log(maxEndingFromRightList);
+//            TestHelper.printArray(maxEndingFromLeftList);
+//            TestHelper.printArray(maxEndingFromRightList);
 
             int answer = Integer.MIN_VALUE;
-            for (int i = 1; i < maxEndingFromLeftList.size() - 1; i++) {
-                int leftSum = maxEndingFromLeftList.get(i - 1);
-                int rightSum = maxEndingFromRightList.get(i + 1);
+            for (int i = 1; i < A.length - 1; i++) {
+                int leftSum = maxEndingFromLeftList[i - 1];
+                int rightSum = maxEndingFromRightList[i + 1];
                 answer = Math.max(answer, leftSum + rightSum);
             }
             return answer;
