@@ -8,7 +8,8 @@ import java.util.*;
 public class FibFrog {
     public static void main(String[] args) {
         int[] A =
-            {1, 0, 0} // 2
+            {1, 1, 0, 0, 0} // 2
+//            {1, 0, 0} // 2
 //            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} // 3
 //            {0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0} // 3
 //            {1} // 1
@@ -39,9 +40,10 @@ public class FibFrog {
         }
 
         public int solution(int[] A) {
-            if (A.length == 0) return -1;
+            if (A.length == 0) return 1;
 
             Set<BigInteger> fiboSet = buildFiboSet(BigInteger.valueOf(A.length));
+//            TestHelper.log(fiboSet);
             List<Integer> jumpList = new ArrayList<>();
             for (int i = 0; i < A.length; i++) {
                 if (A[i] == 1) {
@@ -60,7 +62,7 @@ public class FibFrog {
             while (curpos != tarpos) {
                 int distance = tarpos - curpos;
 
-//                TestHelper.log("curpos=" + curpos + ", tarpos=" + tarpos + ", distance=" + distance + ", jumpListLowerLimit=" + jumpListLowerLimit);
+                TestHelper.log("curpos=" + curpos + ", tarpos=" + tarpos + ", distance=" + distance + ", jumpListLowerLimit=" + jumpListLowerLimit);
 
                 if (fiboSet.contains(BigInteger.valueOf(distance))) {
                     jumpListLowerLimit = jumpListIndex;
