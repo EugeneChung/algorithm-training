@@ -2,9 +2,6 @@ package codility.lesson9;
 
 import helpers.TestHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MaxDoubleSliceSum {
     public static void main(String[] args) {
         int [] A =
