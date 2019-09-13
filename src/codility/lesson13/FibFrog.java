@@ -12,10 +12,11 @@ public class FibFrog {
 //            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} // 3
 //            {0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0} // 3
 //            {1} // 1
+            {1, 1} // 1
 //            {0, 0, 0} //-1
 //            {0, 0, 0, 1, 0, 0, 0, 0, 0} //-1
 //            {0, 0, 1, 1, 0, 0, 0, 0, 0} //-1
-            {0, 0, 1, 1, 0, 0, 1, 0, 0} //4
+//            {0, 0, 1, 1, 0, 0, 1, 0, 0} //4
             ;
 
         Object solution = new Solution().solution(A);
@@ -23,57 +24,49 @@ public class FibFrog {
     }
 
     static class Solution {
-        private Set<Integer> buildFiboSet(int limit) {
-            List<Integer> fiboList = new ArrayList<>(Arrays.asList(0, 1));
+        private List<Integer> buildFibo(int limit) {
+            List<Integer> fiboList = new ArrayList<>(Arrays.asList(1, 1));
 
             while (true) {
                 int fibo = fiboList.get(fiboList.size() - 2) + fiboList.get(fiboList.size() - 1);
                 fiboList.add(fibo);
 
-                if (fibo >= limit) {
+                if (fibo > limit) {
                     break;
                 }
             }
 
-            return new HashSet<>(fiboList);
+            return fiboList;
         }
 
         public int solution(int[] A) {
             if (A.length == 0) return 1;
 
-            Set<Integer> fiboSet = buildFiboSet(A.length);
-            List<Integer> jumpList = new ArrayList<>();
-            for (int i = 0; i < A.length; i++) {
-                if (A[i] == 1) {
-                    jumpList.add(i);
-                }
-            }
-            jumpList.add(A.length);
+            List<Integer> fiboList = buildFibo(A.length);
             final int NO_JUMP = Integer.MAX_VALUE;
 
             int[] minJumps = new int[A.length + 1];
             Arrays.fill(minJumps, NO_JUMP);
 
             int curpos = -1;
-            for (int i = 0; i < jumpList.size(); i++) {
-                int prevJump = 0;
-                if (curpos >= 0) {
-                    prevJump = minJumps[curpos];
-                }
-                if (prevJump != NO_JUMP) {
-                    for (int j = i; j < jumpList.size(); j++) {
-                        int tarpos = jumpList.get(j);
-                        int distance = tarpos - curpos;
-
-                        if (fiboSet.contains(distance)) {
-                            minJumps[tarpos] = Math.min(minJumps[tarpos], prevJump + 1);
-                        }
+            for (int i = 0; i <= A.length; i++) {
+                if (i == A.length || A[i] == 1) {
+                    int prevJump = 0;
+                    if (curpos >= 0) {
+                        prevJump = minJumps[curpos];
                     }
+                    if (prevJump != NO_JUMP) {
+                        for (int fibo : fiboList) {
+                            int targetPos = curpos + fibo;
+                            if (targetPos == A.length || (targetPos < A.length && A[targetPos] == 1)) {
+                                minJumps[targetPos] = Math.min(minJumps[targetPos], prevJump + 1);
+                            }
+                        }
 
-//                    TestHelper.log("curpos=" + curpos + ", minJumps=" + Arrays.toString(minJumps));
+                        TestHelper.log("curpos="  + curpos + ", minJumps=" + Arrays.toString(minJumps));
+                    }
+                    curpos = i;
                 }
-
-                curpos = jumpList.get(i);
             }
 
             if (minJumps[A.length] == Integer.MAX_VALUE) {
