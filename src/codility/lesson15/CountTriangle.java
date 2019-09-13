@@ -42,19 +42,5 @@ public class CountTriangle {
 
             return answer;
         }
-
-        private int findTriangeWhileMovingLeft(int[] A, int left, int right) {
-            int count = 0;
-            if (right - left >= 3) {
-                int i = 2;
-                while (left + i < right) {
-                    if (A[left] + A[left + i] > A[right]) {
-                        count++;
-                    }
-                    i++;
-                }
-            }
-            return count;
-        }
     }
 }
