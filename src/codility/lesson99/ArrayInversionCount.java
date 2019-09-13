@@ -48,7 +48,8 @@ public class ArrayInversionCount {
                 if (l[i] <= r[j]) {
                     arr[k++] = l[i++];
                 } else {
-                    count += (left + j) - k;
+                    count += (left + j) - k; // 오른쪽(r의 j 위치)에서 왼쪽(arr(k) 위치)으로 옮기므로, 그 사이에 존재하는 값들은 모두 inversion 대상이다.
+                                             // left+j에 k를 빼주면 그 값들의 수가 나오게 된다. 
                     if (count > 1_000_000_000) throw new OverflowException();
                     arr[k++] = r[j++];
                 }
