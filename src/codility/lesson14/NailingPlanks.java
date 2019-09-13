@@ -3,6 +3,7 @@ package codility.lesson14;
 import helpers.TestHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,61 +29,38 @@ public class NailingPlanks {
     }
 
     static class Solution {
-        private class Nail implements Comparable<Nail> {
-            final int index;
-            final int position;
+        public int solution(int[] A, int[] B, int[] C) {
+            boolean[] nailed = new boolean[A.length];
+            int low = 1;
+            int high = C.length;
 
-            private Nail(int index, int position) {
-                this.index = index;
-                this.position = position;
+            int minNailCount = -1;
+            while (low <= high) {
+                int mid = (low + high) / 2;
+                if (isAllPlanksNailed(A, B, C, mid, nailed)) {
+                    minNailCount = mid;
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
             }
-
-            @Override
-            public int compareTo(Nail o) {
-                return Integer.compare(this.position, o.position); // sort by the leftmost end
-            }
+            return minNailCount;
         }
 
-        public int solution(int[] A, int[] B, int[] C) {
-            List<Nail> nails = new ArrayList<>(C.length);
-            for (int i = 0; i < C.length; i++) {
-                nails.add(new Nail(i, C[i]));
-            }
-            Collections.sort(nails);
-
-            boolean[] nailed = new boolean[C.length];
-            for (int i = 0; i < A.length; i++) {
-                int locStart = Collections.binarySearch(nails, new Nail(-1, A[i]));
-                if (locStart < 0) {
-                    locStart = -(locStart + 1);
-                }
-                if (locStart == C.length) return -1;
-
-                int locEnd = Collections.binarySearch(nails, new Nail(-1, B[i]));
-                if (locEnd == -1) return -1;
-                if (locEnd < 0) {
-                    locEnd = -(locEnd + 1);
-                    locEnd--;
-                }
-
-                for (int j = locStart; j <= locEnd; j++) {
-                    Nail nail = nails.get(j);
-                    nailed[nail.index] = true;
-                }
-
-                TestHelper.log("locStart=" + locStart + ", locEnd=" + locEnd);
-            }
-            TestHelper.printObject(nailed);
-
-            int nailedCount = 0;
-            for (int i = 0; i < nailed.length; i++) {
-                if (i != nailedCount) return -1;
-                if (nailed[i]) {
-                    nailedCount++;
+        private boolean isAllPlanksNailed(int[] A, int[] B, int[] C, int targetNailCount, boolean[] nailed) {
+            for (int i = 0; i < targetNailCount; i++) {
+                for (int j = 0; j < A.length; j++) {
+                    if (A[j] <= C[i] && C[i] <= B[j]) {
+                        nailed[j] = true;
+                    }
                 }
             }
-            if (nailedCount == 0) return -1;
-            return nailedCount;
+
+            for (boolean v : nailed) {
+                if (!v) return false;
+            }
+            Arrays.fill(nailed, false);
+            return true;
         }
     }
 }
