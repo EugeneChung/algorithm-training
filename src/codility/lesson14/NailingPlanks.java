@@ -2,7 +2,9 @@ package codility.lesson14;
 
 import helpers.TestHelper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class NailingPlanks {
     public static void main(String[] args) {
@@ -26,71 +28,61 @@ public class NailingPlanks {
     }
 
     static class Solution {
-        private class Plank implements Comparable<Plank> {
-            final int id;
-            final int left;
-            final int right;
-            boolean nailed;
+        private class Nail implements Comparable<Nail> {
+            final int index;
+            final int position;
 
-            private Plank(int id, int left, int right) {
-                this.id = id;
-                this.left = left;
-                this.right = right;
+            private Nail(int index, int position) {
+                this.index = index;
+                this.position = position;
             }
 
             @Override
-            public int compareTo(Plank o) {
-                return Integer.compare(this.left, o.left); // sort by the leftmost end
+            public int compareTo(Nail o) {
+                return Integer.compare(this.position, o.position); // sort by the leftmost end
             }
         }
 
         public int solution(int[] A, int[] B, int[] C) {
-            List<Plank> planks = new LinkedList<>();
-            Set<Integer> nailedPlanks = new HashSet<>();
+            List<Nail> nails = new ArrayList<>(C.length);
+            for (int i = 0; i < C.length; i++) {
+                nails.add(new Nail(i, C[i]));
+            }
+            Collections.sort(nails);
 
+            boolean[] nailed = new boolean[C.length];
             for (int i = 0; i < A.length; i++) {
-                planks.add(new Plank(i, A[i], B[i]));
-            }
-            Collections.sort(planks);
-            Arrays.sort(B);
-
-            int nailUsedCount = 0;
-            for (int nail : C) {
-                boolean nailUsed = false;
-                int loc = Collections.binarySearch(planks, new Plank(-1, nail, -1));
-
-                if (loc < 0) {
-                    if (loc == -1) {
-                        nailUsedCount++;
-                        continue;
-                    }
-
-                    loc = -(loc + 1);
-                    loc--;
-                } else {
-                    nailUsed = true;
+                int locStart = Collections.binarySearch(nails, new Nail(-1, A[i]));
+                if (locStart < 0) {
+                    locStart = -(locStart + 1);
                 }
-                for (int j = loc; j >= 0; j--) {
-                    Plank plank = planks.get(j);
-                    if (plank.right >= nail) {
-                        nailUsed = true;
-                        if (!plank.nailed) {
-                            nailedPlanks.add(plank.id);
-                            plank.nailed = true;
-                        }
-                    }
+                if (locStart == C.length) return -1;
+
+                int locEnd = Collections.binarySearch(nails, new Nail(-1, B[i]));
+                if (locEnd == -1) return -1;
+                if (locEnd < 0) {
+                    locEnd = -(locEnd + 1);
+                    locEnd--;
                 }
 
-                if (nailUsed) {
-                    nailUsedCount++;
+                for (int j = locStart; j <= locEnd; j++) {
+                    Nail nail = nails.get(j);
+                    nailed[nail.index] = true;
                 }
-                if (nailedPlanks.size() == A.length) break;
+
+                TestHelper.log("locStart=" + locStart + ", locEnd=" + locEnd);
             }
-//            TestHelper.log(nailedPlanks);
-            if (nailedPlanks.size() == A.length && nailUsedCount > 0) {
-                return nailUsedCount;
+            TestHelper.printObject(nailed);
+
+            int nailedCount = 0;
+            for (int i = 0; i < nailed.length; i++) {
+                if (i != nailedCount) return -1;
+                if (nailed[i]) {
+                    nailedCount++;
+                }
             }
-            return -1;
+            if (nailedCount == 0) return -1;
+            return nailedCount;
         }
     }
 }
