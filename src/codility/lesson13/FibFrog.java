@@ -8,12 +8,15 @@ import java.util.*;
 public class FibFrog {
     public static void main(String[] args) {
         int[] A =
-            {1, 1, 0, 0, 0} // 2
+//            {1, 1, 0, 0, 0} // 2
 //            {1, 0, 0} // 2
 //            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} // 3
 //            {0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0} // 3
 //            {1} // 1
 //            {0, 0, 0} //-1
+//            {0, 0, 0, 1, 0, 0, 0, 0, 0} //-1
+//            {0, 0, 1, 1, 0, 0, 0, 0, 0} //-1
+            {0, 0, 1, 1, 0, 0, 1, 0, 0} //4
             ;
 
         Object solution = new Solution().solution(A);
@@ -43,7 +46,6 @@ public class FibFrog {
             if (A.length == 0) return 1;
 
             Set<BigInteger> fiboSet = buildFiboSet(BigInteger.valueOf(A.length));
-//            TestHelper.log(fiboSet);
             List<Integer> jumpList = new ArrayList<>();
             for (int i = 0; i < A.length; i++) {
                 if (A[i] == 1) {
@@ -51,37 +53,37 @@ public class FibFrog {
                 }
             }
             jumpList.add(A.length);
-//            TestHelper.log(jumpList);
+            final int NO_JUMP = Integer.MAX_VALUE;
+
+            int[] minJumps = new int[A.length + 1];
+            Arrays.fill(minJumps, NO_JUMP);
 
             int curpos = -1;
-            int tarpos = A.length;
-            int jumpListLowerLimit = -1;
-            int jumpListIndex = jumpList.size() - 1;
-            int answer = 0; //jmps
-
-            while (curpos != tarpos) {
-                int distance = tarpos - curpos;
-
-                TestHelper.log("curpos=" + curpos + ", tarpos=" + tarpos + ", distance=" + distance + ", jumpListLowerLimit=" + jumpListLowerLimit);
-
-                if (fiboSet.contains(BigInteger.valueOf(distance))) {
-                    jumpListLowerLimit = jumpListIndex;
-                    jumpListIndex = jumpList.size() - 1;
-                    curpos = tarpos;
-                    answer++;
-                } else {
-                    jumpListIndex--;
-                    if (jumpListIndex <= jumpListLowerLimit) {
-                        break;
-                    }
+            for (int i = 0; i < jumpList.size(); i++) {
+                int prevJump = 0;
+                if (curpos >= 0) {
+                    prevJump = minJumps[curpos];
                 }
-                tarpos = jumpList.get(jumpListIndex);
+                if (prevJump != NO_JUMP) {
+                    for (int j = i; j < jumpList.size(); j++) {
+                        int tarpos = jumpList.get(j);
+                        int distance = tarpos - curpos;
+
+                        if (fiboSet.contains(BigInteger.valueOf(distance))) {
+                            minJumps[tarpos] = Math.min(minJumps[tarpos], prevJump + 1);
+                        }
+                    }
+
+//                    TestHelper.log("curpos=" + curpos + ", minJumps=" + Arrays.toString(minJumps));
+                }
+
+                curpos = jumpList.get(i);
             }
 
-            if (curpos != tarpos || answer == 0) {
+            if (minJumps[A.length] == Integer.MAX_VALUE) {
                 return -1;
             }
-            return answer;
+            return minJumps[A.length];
         }
     }
 }
