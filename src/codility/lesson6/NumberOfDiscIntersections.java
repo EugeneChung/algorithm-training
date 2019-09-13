@@ -31,8 +31,8 @@ public class NumberOfDiscIntersections {
             }
             Arrays.sort(L);
             Arrays.sort(R);
-            TestHelper.printArray(L);
-            TestHelper.printArray(R);
+            TestHelper.printObject(L);
+            TestHelper.printObject(R);
 
             long answer = 0;
             for (int i = 0; i < A.length; i++) {

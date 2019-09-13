@@ -2,8 +2,6 @@ package codility.lesson17;
 
 import helpers.TestHelper;
 
-import java.util.Arrays;
-
 public class MinAbsSum {
     public static void main(String[] args) {
         int[] A =
@@ -52,7 +50,7 @@ public class MinAbsSum {
                     }
                 }
             }
-            TestHelper.printArray(dp);
+            TestHelper.printObject(dp);
 
             return dp[A.length - 1];
         }

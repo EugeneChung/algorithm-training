@@ -1,12 +1,10 @@
 package helpers;
 
-import codility.lesson10.NonDivisors;
-
 public class Algorithms {
     public static void main(String[] s) {
         int[] actual = { 5, 1, 6, 2, 3, 4 };
         mergeSort(actual);
-        TestHelper.printArray(actual);
+        TestHelper.printObject(actual);
         TestHelper.log(binaryGCD(200, 120));
     }
 

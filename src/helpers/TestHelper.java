@@ -5,21 +5,21 @@ import java.util.Arrays;
 public class TestHelper {
     public static void printSolution(Object solution) {
         log("-- Solution --");
-        printArray(solution);
+        printObject(solution);
     }
 
-    public static void printArray(Object array) {
-        if (array.getClass().isArray()) {
-            if (array instanceof int[])
-                log(Arrays.toString((int[]) array));
-            else if (array instanceof long[])
-                log(Arrays.toString((long[]) array));
-            else if (array instanceof boolean[])
-                log(Arrays.toString((boolean[]) array));
+    public static void printObject(Object message) {
+        if (message.getClass().isArray()) {
+            if (message instanceof int[])
+                log(Arrays.toString((int[]) message));
+            else if (message instanceof long[])
+                log(Arrays.toString((long[]) message));
+            else if (message instanceof boolean[])
+                log(Arrays.toString((boolean[]) message));
             else
-                log(Arrays.toString((Object[]) array));
+                log(Arrays.toString((Object[]) message));
         } else {
-            log(array.toString());
+            log(message.toString());
         }
     }
 
