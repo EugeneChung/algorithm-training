@@ -2,8 +2,6 @@ package codility.lesson14;
 
 import helpers.TestHelper;
 
-import java.util.*;
-
 public class MinMaxDivision {
     public static void main(String[] args) {
         int K = 3;
@@ -32,20 +30,20 @@ public class MinMaxDivision {
 
             while (high >= low) {
                 mid = (high + low) / 2;
-                int numberOfBlock = blockCount(mid, A);
+                int numberOfBlock = countBlocks(mid, A);
 
                 if (numberOfBlock > K) {
                     low = mid + 1;
                 } else {
+                    // target sum(mid)으로 block을 만들 수 있는 경우 더 작은 sum으로 시도해 본다.
                     smallestSum = mid;
                     high = mid - 1;
                 }
-
             }
             return smallestSum;
         }
 
-        private int blockCount(int max, int[] A) {
+        private int countBlocks(int max, int[] A) {
             int current = 0;
             int count = 1;
             for (int i = 0; i< A.length; i++) {

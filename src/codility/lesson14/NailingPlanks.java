@@ -7,19 +7,19 @@ import java.util.*;
 public class NailingPlanks {
     public static void main(String[] args) {
         int[] A =
-//            {1, 4, 5, 8}
-//            {1, 4, 5, 8}
             {1, 4, 5, 8}
+//            {1, 4, 5, 8}
+//            {1, 4, 5, 8}
             ;
         int[] B =
-//            {4, 5, 9, 10}
+            {4, 5, 9, 10}
 //            {1, 4, 5, 8}
-            {2, 4, 5, 8}
+//            {2, 4, 5, 8}
             ;
         int[] C =
+            {4, 6, 7, 10, 2} // 4
 //            {4, 6, 7, 10, 2}
-//            {4, 6, 7, 10, 2}
-            {8, 5, 4, 2}
+//            {8, 5, 4, 2}
             ;
         Object solution = new Solution().solution(A, B, C);
         TestHelper.printSolution(solution);
@@ -60,15 +60,12 @@ public class NailingPlanks {
                 int loc = Collections.binarySearch(planks, new Plank(-1, nail, -1));
 
                 if (loc < 0) {
-                    if (loc == -1) continue;
+                    if (loc == -1) {
+                        nailUsedCount++;
+                        continue;
+                    }
 
                     loc = -(loc + 1);
-                    if (loc == planks.size()) {
-                        int locCheck = Arrays.binarySearch(B, nail);
-                        if (locCheck < 0 && -(locCheck + 1) == B.length) {
-                            continue;
-                        }
-                    }
                     loc--;
                 } else {
                     nailUsed = true;
@@ -78,8 +75,8 @@ public class NailingPlanks {
                     if (plank.right >= nail) {
                         nailUsed = true;
                         if (!plank.nailed) {
-                            plank.nailed = true;
                             nailedPlanks.add(plank.id);
+                            plank.nailed = true;
                         }
                     }
                 }
@@ -87,12 +84,12 @@ public class NailingPlanks {
                 if (nailUsed) {
                     nailUsedCount++;
                 }
-                if (nailedPlanks.size() == planks.size()) break;
+                if (nailedPlanks.size() == A.length) break;
             }
-            if (nailedPlanks.size() == planks.size() && nailUsedCount > 0) {
+//            TestHelper.log(nailedPlanks);
+            if (nailedPlanks.size() == A.length && nailUsedCount > 0) {
                 return nailUsedCount;
             }
-            TestHelper.log(nailedPlanks);
             return -1;
         }
     }

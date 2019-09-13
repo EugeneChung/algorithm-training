@@ -8,6 +8,10 @@ public class TestHelper {
         printObject(solution);
     }
 
+    public static void printArray(Object message) {
+        printObject(message);
+    }
+
     public static void printObject(Object message) {
         if (message.getClass().isArray()) {
             if (message instanceof int[])
