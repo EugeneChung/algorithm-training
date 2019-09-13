@@ -2,7 +2,6 @@ package codility.lesson13;
 
 import helpers.TestHelper;
 
-import java.math.BigInteger;
 import java.util.*;
 
 public class FibFrog {
@@ -24,17 +23,14 @@ public class FibFrog {
     }
 
     static class Solution {
-        private Set<BigInteger> buildFiboSet(BigInteger limit) {
-            List<BigInteger> fiboList = new ArrayList<>(Arrays.asList(
-                BigInteger.valueOf(0L), BigInteger.valueOf(1L))
-            );
+        private Set<Integer> buildFiboSet(int limit) {
+            List<Integer> fiboList = new ArrayList<>(Arrays.asList(0, 1));
 
             while (true) {
-                BigInteger fibo = fiboList.get(fiboList.size() - 2).add(fiboList.get(fiboList.size() - 1));
-
-                int result = fibo.compareTo(limit);
+                int fibo = fiboList.get(fiboList.size() - 2) + fiboList.get(fiboList.size() - 1);
                 fiboList.add(fibo);
-                if (result > 0) {
+
+                if (fibo >= limit) {
                     break;
                 }
             }
@@ -45,7 +41,7 @@ public class FibFrog {
         public int solution(int[] A) {
             if (A.length == 0) return 1;
 
-            Set<BigInteger> fiboSet = buildFiboSet(BigInteger.valueOf(A.length));
+            Set<Integer> fiboSet = buildFiboSet(A.length);
             List<Integer> jumpList = new ArrayList<>();
             for (int i = 0; i < A.length; i++) {
                 if (A[i] == 1) {
@@ -69,7 +65,7 @@ public class FibFrog {
                         int tarpos = jumpList.get(j);
                         int distance = tarpos - curpos;
 
-                        if (fiboSet.contains(BigInteger.valueOf(distance))) {
+                        if (fiboSet.contains(distance)) {
                             minJumps[tarpos] = Math.min(minJumps[tarpos], prevJump + 1);
                         }
                     }
