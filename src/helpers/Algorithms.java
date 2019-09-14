@@ -71,11 +71,22 @@ public class Algorithms {
         else return binaryGCD(p, (q - p) >> 1);
     }
 
+    public static boolean isPrime(long val) {
+        long i = 2;
+        while (i * i <= val) {
+            if (val % i == 0) {
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+
     public static boolean[] buildPrimeCheckSet(int n) {
         // https://introcs.cs.princeton.edu/java/14array/PrimeSieve.java.html
-        boolean[] isPrime = new boolean[n + 1];
+        boolean[] primeCheckSet = new boolean[n + 1];
         for (int i = 2; i <= n; i++) {
-            isPrime[i] = true;
+            primeCheckSet[i] = true;
         }
 
         // mark non-primes <= n using Sieve of Eratosthenes
@@ -83,14 +94,14 @@ public class Algorithms {
 
             // if factor is prime, then mark multiples of factor as nonprime
             // suffices to consider mutiples factor, factor+1, ...,  n/factor
-            if (isPrime[factor]) {
+            if (primeCheckSet[factor]) {
                 for (int j = factor; factor * j <= n; j++) {
-                    isPrime[factor * j] = false;
+                    primeCheckSet[factor * j] = false;
                 }
             }
         }
 
-        return isPrime;
+        return primeCheckSet;
     }
 
     public static int maxInArray(int... array) {
