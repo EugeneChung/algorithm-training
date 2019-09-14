@@ -7,11 +7,11 @@ import java.util.*;
 public class SocksLaundering {
     public static void main(String[] args) {
 //        int K = 0; int[] C = {1, 2, 1, 1}, D = {1, 4, 3, 2, 4}; //1
-          int K = 10; int[] C = {1,2,1,1,3}, D = {1,4,3,2,4}; //5
+//          int K = 10; int[] C = {1,2,1,1,3}, D = {1,4,3,2,4}; //5
 //        int K = 2; int[] C = {1, 2, 1, 1}, D = {1, 4, 3, 2, 4}; //3
 //        int K = 10; int[] C = {1, 1, 1}, D = {2, 2, 2, 1}; //3
 //        int K = 1; int[] C = {1, 1, 2, 1}, D = {2, 2, 2}; //2
-//        int K = 5; int[] C = {2, 3, 4}, D = {2, 2, 2, 2, 2}; //3
+        int K = 5; int[] C = {2, 3, 4}, D = {2, 2, 2, 2, 2}; //3
 //        int K = 100; int[] C = {2, 3, 4}, D = {2, 2, 2, 2, 2}; //3
 //        int K = 100; int[] C = {1, 3, 4}, D = {2, 2, 2, 2, 2}; //2
 //        int K = 100; int[] C = {2, 3, 4}, D = {2, 2, 2, 2, 2}; //3
@@ -70,6 +70,9 @@ public class SocksLaundering {
                         iterator.remove();
                         cleanedSocksCount++;
                         laundaryRemainingCount--;
+                        if (laundaryRemainingCount == 0) {
+                            break;
+                        }
                     }
                 }
                 while (laundaryRemainingCount > 1) {
