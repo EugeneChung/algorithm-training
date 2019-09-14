@@ -13,11 +13,11 @@ public class CountDiv {
 
     static class Solution {
         public int solution(int A, int B, int K) {
-            int count = 0;
-            for (int i = A; i <= B; i++) {
-                if (i % K == 0) count++;
+            int result = B / K + 1;
+            if (A != 0) {
+                result -= ((A - 1) / K + 1);
             }
-            return count;
+            return result;
         }
     }
 }
