@@ -9,10 +9,6 @@ public class Element implements Comparable<Element> {
         this.value = value;
     }
 
-    public static Element of(int index, int value) {
-        return new Element(index, value);
-    }
-
     @Override
     public String toString() {
         return "A[" + index + "]=" + value;
