@@ -59,11 +59,11 @@ public class RectangularArea {
 
                 count += lengths.size() - loc;
                 if (i > loc) count--; // remove self counting
+                if (count > 2_000_000_000) {
+                    return -1;
+                }
             }
             count = count / 2;
-            if (count > 1_000_000_000) {
-                return -1;
-            }
 
             for (long len : lengthOver4s) {
                 long area = len * len;
