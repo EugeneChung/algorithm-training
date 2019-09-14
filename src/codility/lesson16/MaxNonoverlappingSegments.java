@@ -2,7 +2,7 @@ package codility.lesson16;
 
 import helpers.TestHelper;
 
-public class NonOverlap {
+public class MaxNonoverlappingSegments {
     public static void main(String[] args) {
         int[] A =
             {1, 3, 7, 9, 9}

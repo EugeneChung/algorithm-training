@@ -2,7 +2,7 @@ package codility.lesson16;
 
 import helpers.TestHelper;
 
-public class TiedRopes {
+public class TieRopes {
     public static void main(String[] args) {
         int K =
 //            4
