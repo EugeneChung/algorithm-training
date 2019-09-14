@@ -1,7 +1,5 @@
 package codility.lesson3;
 
-import java.util.Arrays;
-
 public class FrogJmp {
     public static void main(String[] args) {
         System.out.println(new Solution().solution(1, 1000000000, 4));

@@ -1,8 +1,6 @@
 package codility.lesson3;
 
-import java.util.Arrays;
-
-public class TapeEq {
+public class TapeEquilibrium {
     public static void main(String[] args) {
         int[] A =
             //{0, 0};
@@ -17,23 +15,23 @@ public class TapeEq {
 
     static class Solution {
         public int solution(int[] A) {
-            int[] sum_asc = new int[A.length];
-            int[] sum_desc = new int[A.length];
+            int[] prefixSum = new int[A.length];
+            int[] suffixSum = new int[A.length];
 
             int sum = 0;
             for (int i = 0; i < A.length; i++) {
                 sum += A[i];
-                sum_asc[i] = sum;
+                prefixSum[i] = sum;
             }
             sum = 0;
             for (int i = A.length - 1; i >= 0; i--) {
                 sum += A[i];
-                sum_desc[i] = sum;
+                suffixSum[i] = sum;
             }
 
             int answer = Integer.MAX_VALUE;
             for (int P = 1; P < A.length; P++) {
-                answer = Math.min(Math.abs(sum_asc[P - 1] - sum_desc[P]), answer);
+                answer = Math.min(Math.abs(prefixSum[P - 1] - suffixSum[P]), answer);
                 if (answer == 0) {
                     break;
                 }
