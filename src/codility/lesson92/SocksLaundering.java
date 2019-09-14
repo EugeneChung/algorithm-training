@@ -31,27 +31,17 @@ public class SocksLaundering {
 
     static class Solution {
         public int solution(int K, int[] C, int[] D) {
-            Arrays.sort(C);
-
-            int currentSock = 0;
-            int currentSockCount = 0;
+            int pairs = 0;
             Set<Integer> cleanOddSockSet = new HashSet<>();
             for (int sock : C) {
-                if (currentSock != sock) {
-                    if (currentSockCount % 2 == 1) {
-                        cleanOddSockSet.add(currentSock);
-                    }
-                    currentSock = sock;
-                    currentSockCount = 1;
+                if (cleanOddSockSet.remove(sock)) {
+                    pairs++;
                 } else {
-                    currentSockCount++;
+                    cleanOddSockSet.add(sock);
                 }
             }
-            if (currentSockCount % 2 == 1) {
-                cleanOddSockSet.add(currentSock);
-            }
+            TestHelper.log(cleanOddSockSet);
 
-            int cleanedSocksCount = 0;
             if (K > 0) {
                 Map<Integer, Integer> dirtySocketMap = new HashMap<>();
                 for (int value : D) {
@@ -59,16 +49,15 @@ public class SocksLaundering {
                     count++;
                     dirtySocketMap.put(value, count);
                 }
+                TestHelper.log(dirtySocketMap);
 
                 int laundaryRemainingCount = K;
-                for (Iterator<Integer> iterator = cleanOddSockSet.iterator(); iterator.hasNext(); ) {
-                    int dirtySock = iterator.next();
-                    int count = dirtySocketMap.getOrDefault(dirtySock, 0);
+                for (int sock : cleanOddSockSet) {
+                    int count = dirtySocketMap.getOrDefault(sock, 0);
                     if (count > 0) {
                         count--;
-                        dirtySocketMap.put(dirtySock, count);
-                        iterator.remove();
-                        cleanedSocksCount++;
+                        dirtySocketMap.put(sock, count);
+                        pairs++;
                         laundaryRemainingCount--;
                         if (laundaryRemainingCount == 0) {
                             break;
@@ -79,8 +68,8 @@ public class SocksLaundering {
                     int uselessEntryCount = 0;
                     for (Map.Entry<Integer, Integer> entry : dirtySocketMap.entrySet()) {
                         if (entry.getValue() > 1) {
-                            cleanedSocksCount += 2;
-                            laundaryRemainingCount = laundaryRemainingCount - 2;
+                            pairs++;
+                            laundaryRemainingCount -= 2;
                             entry.setValue(entry.getValue() - 2);
                         } else {
                             uselessEntryCount++;
@@ -93,8 +82,7 @@ public class SocksLaundering {
             }
 //            TestHelper.log(cleanOddSockSet);
 
-            int cleanSocks = C.length - cleanOddSockSet.size() + cleanedSocksCount;
-            return cleanSocks / 2;
+            return pairs;
         }
     }
 }
