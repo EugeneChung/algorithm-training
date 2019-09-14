@@ -30,13 +30,13 @@ public class MaxDoubleSliceSum {
                 maxEndingRight = Math.max(0, maxEndingRight + A[i]);
                 maxEndingFromRightList[i] = maxEndingRight;
             }
-//            TestHelper.printArray(maxEndingFromLeftList);
-//            TestHelper.printArray(maxEndingFromRightList);
+            TestHelper.printArray(maxEndingFromLeftList);
+            TestHelper.printArray(maxEndingFromRightList);
 
             int answer = Integer.MIN_VALUE;
-            for (int i = 1; i < A.length - 1; i++) {
-                int leftSum = maxEndingFromLeftList[i - 1];
-                int rightSum = maxEndingFromRightList[i + 1];
+            for (int y = 1; y < A.length - 1; y++) {
+                int leftSum = maxEndingFromLeftList[y - 1];
+                int rightSum = maxEndingFromRightList[y + 1];
                 answer = Math.max(answer, leftSum + rightSum);
             }
             return answer;
