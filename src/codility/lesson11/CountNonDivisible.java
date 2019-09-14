@@ -1,10 +1,10 @@
-package codility.lesson10;
+package codility.lesson11;
 
 import helpers.TestHelper;
 
 import java.util.*;
 
-public class NonDivisors {
+public class CountNonDivisible {
     public static void main(String[] args) {
         int[] A =
             {100, 10, 5, 15, 2, 3} // [2, 3, 5, 3, 5, 5]
