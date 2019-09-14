@@ -74,6 +74,7 @@ public class SocksLaundering {
                         } else {
                             uselessEntryCount++;
                         }
+                        if (laundaryRemainingCount <= 1) break;
                     }
                     if (uselessEntryCount == dirtySocketMap.size()) {
                         laundaryRemainingCount = 0;
