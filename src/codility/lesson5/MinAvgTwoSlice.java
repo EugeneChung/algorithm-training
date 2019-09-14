@@ -2,8 +2,6 @@ package codility.lesson5;
 
 import helpers.TestHelper;
 
-import java.util.TreeSet;
-
 public class MinAvgTwoSlice {
     public static void main(String[] args) {
         int[] A =
@@ -32,26 +30,27 @@ public class MinAvgTwoSlice {
             }
 
             double minAverage = Double.MAX_VALUE;
-            TreeSet<Integer> minAverageStartingPoints = new TreeSet<>();
-            for (int i = 0; i < A.length; i++) {
-                for (int j = i + 1; j < A.length; j++) {
-                    double sum = PS[j + 1] - PS[i];
-                    double sliceLen = j - i + 1;
-                    double avg = sum / sliceLen;
-
-                    int result = Double.compare(avg, minAverage);
-                    if (result < 0) {
-                        minAverageStartingPoints.clear();
-                        minAverage = avg;
-                        minAverageStartingPoints.add(i);
-                    } else if (result == 0) {
-                        minAverageStartingPoints.add(i);
-                    }
+            int minAvgIndex = -1;
+            for (int i = 0; i < A.length - 1; i++) {
+                double sum = PS[i + 2] - PS[i];
+                double avg = sum / 2;
+                int result = Double.compare(avg, minAverage);
+                if (result < 0) {
+                    minAverage = avg;
+                    minAvgIndex = i;
                 }
+                if (i + 3 <= A.length) {
+                    sum = PS[i + 3] - PS[i];
+                    avg = sum / 3;
+                    result = Double.compare(avg, minAverage);
+                    if (result < 0) {
+                        minAverage = avg;
+                        minAvgIndex = i;
+                    }
+                } 
             }
 //            TestHelper.log(minAverage);
-//            TestHelper.log(minAverageStartingPoints);
-            return minAverageStartingPoints.first();
+            return minAvgIndex;
         }
     }
 }
