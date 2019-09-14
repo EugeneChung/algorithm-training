@@ -41,7 +41,7 @@ public class Ladder {
             List<Integer> fiboLadders = new ArrayList<>(maxL);
             fiboLadders.add(1); // n = 1
             fiboLadders.add(1); // n = 2
-            int maxMod = 1 << 30;
+            int maxMod = 1 << 30; // 2^30
             for (int i = 2; i <= maxL; i++) {
                 fiboLadders.add((fiboLadders.get(i - 2) + fiboLadders.get(i - 1)) % maxMod);
             }
@@ -50,7 +50,7 @@ public class Ladder {
             int[] answer = new int[A.length];
             for (int i = 0; i < A.length; i++) {
                 int fibo = fiboLadders.get(A[i]);
-                answer[i] = fibo % (1 << B[i]);
+                answer[i] = fibo % (1 << B[i]); // 2^B[i]
             }
             return answer;
         }

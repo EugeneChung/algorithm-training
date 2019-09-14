@@ -1,12 +1,10 @@
 package helpers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Algorithms {
-    public static void main(String[] s) {
-        int[] actual = { 5, 1, 6, 2, 3, 4 };
-        mergeSort(actual);
-        TestHelper.printObject(actual);
-        TestHelper.log(binaryGCD(200, 120));
-    }
 
     public static void mergeSort(int[] a) {
         final int n = a.length;
@@ -134,4 +132,31 @@ public class Algorithms {
         }
     }
 
+    public static void generateGrayCode(int nBit) {
+        List<String> codes = new ArrayList<>(Arrays.asList("0", "1"));
+
+        for (int i = 2; i < (1 << nBit); i = i << 1 /* i * 2 */) {
+            for (int j = codes.size() - 1; j >= 0; j--) {
+                codes.add(codes.get(j));
+            }
+            int j = 0;
+            // attach 0
+            for (j = 0; j < codes.size() / 2; j++) {
+                codes.set(j, "0" + codes.get(j));
+            }
+            // attach 1
+            for (; j < codes.size(); j++) {
+                codes.set(j, "1" + codes.get(j));
+            }
+            TestHelper.log(codes);
+        }
+    }
+
+    public static void main(String[] s) {
+        int[] actual = { 5, 1, 6, 2, 3, 4 };
+//        mergeSort(actual);
+//        TestHelper.printObject(actual);
+//        TestHelper.log(binaryGCD(200, 120));
+        generateGrayCode(3);
+    }
 }
