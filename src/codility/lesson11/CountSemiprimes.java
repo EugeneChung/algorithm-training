@@ -61,7 +61,7 @@ public class CountSemiprimes {
                 }
             }
             Collections.sort(semiprimes);
-            TestHelper.log(semiprimes);
+//            TestHelper.log(semiprimes);
 
             int[] answers = new int[P.length];
             for (int i = 0; i < P.length; i++) {

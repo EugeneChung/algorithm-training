@@ -4,7 +4,7 @@ import helpers.TestHelper;
 
 import java.util.Arrays;
 
-public class CountTriangle {
+public class CountTriangles {
     public static void main(String[] args) {
         int[] A =
             {10, 2, 5, 1, 8, 12, 11, 15} // 20
