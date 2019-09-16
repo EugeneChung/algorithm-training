@@ -1,4 +1,4 @@
-package programmers;
+package programmers.sorting;
 
 import java.util.*;
 import java.util.stream.Collectors;
