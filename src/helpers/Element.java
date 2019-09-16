@@ -1,6 +1,6 @@
 package helpers;
 
-public class Element implements Comparable<Element> {
+class Element implements Comparable<Element> {
     final int index;
     final int value;
 
