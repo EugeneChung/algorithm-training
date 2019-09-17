@@ -70,6 +70,7 @@ public class Algorithms {
     }
 
     public static boolean isPrime(long val) {
+        if (val <= 1) return false;
         long i = 2;
         while (i * i <= val) {
             if (val % i == 0) {
