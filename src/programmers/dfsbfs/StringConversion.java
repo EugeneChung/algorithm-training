@@ -14,8 +14,8 @@ public class StringConversion {
         public String[] solution(String[][] tickets) {
             Map<String, List<String>> travelMap = new HashMap<>();
             for (String[] ticket : tickets) {
-                List<String> set = travelMap.computeIfAbsent(ticket[0], k -> new ArrayList<>());
-                set.add(ticket[1]);
+                List<String> list = travelMap.computeIfAbsent(ticket[0], k -> new ArrayList<>());
+                list.add(ticket[1]);
             }
             for (List<String> list : travelMap.values()) {
                 if (list.size() > 1) {

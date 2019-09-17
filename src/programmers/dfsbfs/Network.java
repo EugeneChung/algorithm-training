@@ -1,54 +1,34 @@
 package programmers.dfsbfs;
 
-import java.util.*;
+import helpers.TestHelper;
 
 public class Network {
     public static void main(String[] args) {
-        //int[][] computers = {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}};
-        int[][] computers = {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}};
-        int reserve = 3;
-        System.out.println("Solution : " + new Solution().solution(reserve, computers));
+//        int[][] computers = {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}}; int n = 3; // 2
+        int[][] computers = {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}}; int n = 3; //1
+        TestHelper.printSolution(new Solution().solution(n, computers));
     }
 
     static class Solution {
         public int solution(int n, int[][] computers) {
-            Queue<Integer> networkRootCandidate = new LinkedList<>();
-            Stack<Integer> nodes = new Stack<>();
-            Map<Integer, Set<Integer>> networkMap = new HashMap<>();
-
-            networkRootCandidate.add(0);
-
-            while (!networkRootCandidate.isEmpty()) {
-                int rootCandidate = networkRootCandidate.poll();
-
-                Set<Integer> network = networkMap.get(rootCandidate);
-                if (network == null) {
-                    network = new HashSet<>(Collections.singletonList(rootCandidate));
-                    networkMap.put(rootCandidate, network);
-                } else {
-                    continue;
-                }
-
-                nodes.push(rootCandidate);
-                while (!nodes.empty()) {
-                    int i = nodes.pop();
-
-                    for (int j = 0; j < n; j++) {
-                        if (i != j) {
-                            if (computers[i][j] == 1) {
-                                if (network.add(j)) {
-                                    networkMap.put(j, network);
-                                    networkRootCandidate.remove(j);
-                                    nodes.push(j);
-                                }
-                            } else if (!networkMap.containsKey(j)) {
-                                networkRootCandidate.add(j);
-                            }
-                        }
-                    }
+            int answer = 0;
+            boolean[] linked = new boolean[computers.length];
+            for (int i = 0; i < computers.length; i++) {
+                if (!linked[i]) {
+                    findLinkedComputers(computers, linked, i);
+                    answer++;
                 }
             }
-            return new HashSet<>(networkMap.values()).size();
+            return answer;
+        }
+
+        private void findLinkedComputers(int[][] computers, boolean[] linked, int targetComputer) {
+            linked[targetComputer] = true; // important!
+            for (int i = 0; i < computers.length; i++) {
+                if (targetComputer != i && computers[targetComputer][i] == 1 && !linked[i]) {
+                    findLinkedComputers(computers, linked, i);
+                }
+            }
         }
     }
 }
