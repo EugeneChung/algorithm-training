@@ -2,8 +2,10 @@ package programmers.graph;
 
 import helpers.TestHelper;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 
 public class 가장먼노드 {
     public static void main(String[] args) {
@@ -22,7 +24,8 @@ public class 가장먼노드 {
         class Node {
             final int id;
             final Map<Integer, Node> neighborMap = new HashMap<>();
-            int distanceFromNodeOne;
+            int distanceFromNodeOne = Integer.MAX_VALUE;
+            int minDistanceFromNodeOneOfNeighbor = Integer.MAX_VALUE;
 
             public Node(int id) {
                 this.id = id;
@@ -44,19 +47,47 @@ public class 가장먼노드 {
             for (int i = 0; i <= n; i++) {
                 nodes[i] = new Node(i);
             }
+            nodes[1].distanceFromNodeOne = 0;
 
             for (int[] e : edge) {
                 nodes[e[0]].addNeighbor(nodes[e[1]]);
                 nodes[e[1]].addNeighbor(nodes[e[0]]);
             }
 
-            boolean[] visited = new boolean[n + 1];
-            dfs(nodes, visited, 1, 0);
-            TestHelper.printArray(nodes);
+            Queue<Node> bfsQueue = new ArrayDeque<>(nodes.length);
+            boolean[] visited = new boolean[nodes.length];
+            bfsQueue.add(nodes[1]);
+
+            while (!bfsQueue.isEmpty()) {
+                Node nodeVisited = bfsQueue.poll();
+                visited[nodeVisited.id] = true;
+                if (nodeVisited.id == 1) {
+                    nodeVisited.distanceFromNodeOne = 0;
+                } else if (nodeVisited.neighborMap.containsKey(1)) {
+                    nodeVisited.distanceFromNodeOne = 1;
+                } else {
+                    int minDistance = Integer.MAX_VALUE;
+                    for (Node neighbor : nodeVisited.neighborMap.values()) {
+                        minDistance = Math.min(minDistance, neighbor.distanceFromNodeOne);
+                    }
+                    nodeVisited.distanceFromNodeOne = minDistance + 1;
+                }
+                for (Node neighbor : nodeVisited.neighborMap.values()) {
+                    if (visited[neighbor.id]) {
+                        nodes[neighbor.id].distanceFromNodeOne = Math.min(nodeVisited.distanceFromNodeOne + 1, nodes[neighbor.id].distanceFromNodeOne);
+                    } else {
+                        bfsQueue.add(neighbor);
+                    }
+                    //nodeVisited.minDistanceFromNodeOneOfNeighbor = Math.min(nodeVisited.minDistanceFromNodeOneOfNeighbor, neighbor.distanceFromNodeOne);
+                }
+            }
+
+//            TestHelper.printArray(nodes);
 
             int maxDistanceFromNodeOne = 0;
             Map<Integer, Integer> counterMap = new HashMap<>();
             for (Node node : nodes) {
+                if (node.distanceFromNodeOne == Integer.MAX_VALUE) continue;
                 maxDistanceFromNodeOne = Math.max(maxDistanceFromNodeOne, node.distanceFromNodeOne);
                 counterMap.compute(node.distanceFromNodeOne, (k, v) -> {
                     if (v == null) return 1; else return v + 1;
