@@ -66,9 +66,12 @@ public class 가장먼노드 {
                 } else if (nodeVisited.neighborMap.containsKey(1)) {
                     nodeVisited.distanceFromNodeOne = 1;
                 } else {
-                    int minDistance = Integer.MAX_VALUE;
-                    for (Node neighbor : nodeVisited.neighborMap.values()) {
-                        minDistance = Math.min(minDistance, neighbor.distanceFromNodeOne);
+                    int minDistance = nodeVisited.minDistanceFromNodeOneOfNeighbor;
+                    if (minDistance == Integer.MAX_VALUE) {
+                        for (Node neighbor : nodeVisited.neighborMap.values()) {
+                            minDistance = Math.min(minDistance, neighbor.distanceFromNodeOne);
+                        }
+                        nodeVisited.minDistanceFromNodeOneOfNeighbor = minDistance;
                     }
                     nodeVisited.distanceFromNodeOne = minDistance + 1;
                 }
@@ -78,7 +81,7 @@ public class 가장먼노드 {
                     } else {
                         bfsQueue.add(neighbor);
                     }
-                    //nodeVisited.minDistanceFromNodeOneOfNeighbor = Math.min(nodeVisited.minDistanceFromNodeOneOfNeighbor, neighbor.distanceFromNodeOne);
+                    nodeVisited.minDistanceFromNodeOneOfNeighbor = Math.min(nodeVisited.minDistanceFromNodeOneOfNeighbor, neighbor.distanceFromNodeOne);
                 }
             }
 
