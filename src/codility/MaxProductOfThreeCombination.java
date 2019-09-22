@@ -1,4 +1,4 @@
-package combination;
+package codility;
 
 import helpers.TestHelper;
 

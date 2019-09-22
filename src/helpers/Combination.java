@@ -1,4 +1,4 @@
-package combination;
+package helpers;
 
 import java.util.Arrays;
 
