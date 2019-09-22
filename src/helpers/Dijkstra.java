@@ -48,13 +48,13 @@ public class Dijkstra {
             // finalized 
             settled.add(u);
 
-            e_Neighbours(u);
+            traverseNeighbours(u);
         }
     }
 
     // Function to process all the neighbours  
     // of the passed node 
-    private void e_Neighbours(int u) {
+    private void traverseNeighbours(int u) {
         int edgeDistance = -1;
         int newDistance = -1;
 
