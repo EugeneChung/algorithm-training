@@ -136,7 +136,7 @@ public class Algorithms {
     public static void generateGrayCode(int nBit) {
         List<String> codes = new ArrayList<>(Arrays.asList("0", "1"));
 
-        for (int i = 2; i < (1 << nBit); i = i << 1 /* i * 2 */) {
+        for (int i = 0; i < nBit - 1; i++) {
             for (int j = codes.size() - 1; j >= 0; j--) {
                 codes.add(codes.get(j));
             }
@@ -149,8 +149,8 @@ public class Algorithms {
             for (; j < codes.size(); j++) {
                 codes.set(j, "1" + codes.get(j));
             }
-            TestHelper.log(codes);
         }
+        TestHelper.log(codes);
     }
 
     public static void main(String[] s) {
@@ -158,6 +158,6 @@ public class Algorithms {
 //        mergeSort(actual);
 //        TestHelper.printObject(actual);
 //        TestHelper.log(binaryGCD(200, 120));
-        generateGrayCode(3);
+        generateGrayCode(6);
     }
 }
