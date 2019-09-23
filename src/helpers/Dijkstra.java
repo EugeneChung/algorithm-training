@@ -84,8 +84,7 @@ public class Dijkstra {
     }
 
     public static void main(String arg[]) {
-        int V = 5;
-        int source = 0;
+        int V = 7;
 
         // Adjacency list representation of the  
         // connected edges 
@@ -98,13 +97,22 @@ public class Dijkstra {
         }
 
         // Inputs for the DPQ graph 
-        adj.get(0).add(new Node(1, 9));
-        adj.get(0).add(new Node(2, 6));
-        adj.get(0).add(new Node(3, 5));
-        adj.get(0).add(new Node(4, 3));
+        adj.get(0).add(new Node(1, 5));
+        adj.get(0).add(new Node(3, 21));
 
-        adj.get(2).add(new Node(1, 2));
-        adj.get(2).add(new Node(3, 4));
+        adj.get(1).add(new Node(2, 40));
+
+        adj.get(2).add(new Node(3, 13));
+        adj.get(2).add(new Node(4, 19));
+
+        adj.get(3).add(new Node(5, 41));
+
+        adj.get(4).add(new Node(5, 32));
+        adj.get(4).add(new Node(6, 14));
+
+        adj.get(5).add(new Node(6, 8));
+
+        int source = 0;
 
         // Calculate the single source shortest path 
         Dijkstra dpq = new Dijkstra(V);
@@ -118,7 +126,7 @@ public class Dijkstra {
                 + dpq.distances[i]);
 
         StringBuilder path = new StringBuilder();
-        dpq.printPath(path, 1);
+        dpq.printPath(path, 6);
         System.out.println(path.toString());
     }
 }
