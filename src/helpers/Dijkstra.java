@@ -22,17 +22,20 @@ public class Dijkstra {
     private Set<Integer> settled;
     private PriorityQueue<Node> pq;
     private List<List<Node>> adj;
+    private int[] parents;
 
     Dijkstra(int V) {
         distances = new int[V];
         settled = new HashSet<>();
         pq = new PriorityQueue<>(V);
+        parents = new int[V];
     }
 
     public void dijkstra(List<List<Node>> adj, int src) {
         this.adj = adj;
 
         Arrays.fill(distances, Integer.MAX_VALUE);
+        Arrays.fill(parents, -1); //NO_PARENT
 
         // Add source node to the priority queue 
         pq.add(new Node(src, 0));
@@ -40,40 +43,44 @@ public class Dijkstra {
         // Distance to the source is 0 
         distances[src] = 0;
         while (settled.size() != distances.length) {
-            // remove the minimum distance node  
-            // from the priority queue  
+            // remove the minimum distance node from the priority queue  
             int u = pq.remove().node;
 
-            // adding the node whose distance is 
-            // finalized 
+            // adding the node whose distance is finalized 
             settled.add(u);
 
             traverseNeighbours(u);
         }
     }
 
-    // Function to process all the neighbours  
-    // of the passed node 
+    // Function to process all the neighbours of the passed node 
     private void traverseNeighbours(int u) {
-        int edgeDistance = -1;
-        int newDistance = -1;
-
         // All the neighbors of v 
         for (int i = 0; i < adj.get(u).size(); i++) {
             Node v = adj.get(u).get(i);
 
             // If current node hasn't already been processed 
             if (!settled.contains(v.node)) {
-                edgeDistance = v.cost;
-                newDistance = distances[u] + edgeDistance;
-
-                // If new distance is cheaper in cost
-                distances[v.node] = Math.min(distances[v.node], newDistance);
+                int newDistance = distances[u] + v.cost;
+                if (newDistance < distances[v.node]) {
+                    // If new distance is cheaper in cost
+                    distances[v.node] = newDistance;
+                    parents[v.node] = u;
+                }
 
                 // Add the current node to the queue 
                 pq.add(new Node(v.node, distances[v.node]));
             }
         }
+    }
+
+    private void printPath(StringBuilder path, int pos) {
+        if (parents[pos] == -1) {
+            path.insert(0, pos);
+            return;
+        }
+        path.insert(0, pos).insert(0, "->");
+        printPath(path, parents[pos]);
     }
 
     public static void main(String arg[]) {
@@ -109,5 +116,9 @@ public class Dijkstra {
         for (int i = 0; i < dpq.distances.length; i++)
             System.out.println(source + " to " + i + " is "
                 + dpq.distances[i]);
+
+        StringBuilder path = new StringBuilder();
+        dpq.printPath(path, 1);
+        System.out.println(path.toString());
     }
 }
