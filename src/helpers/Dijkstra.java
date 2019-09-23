@@ -42,7 +42,7 @@ public class Dijkstra {
 
         // Distance to the source is 0 
         distances[src] = 0;
-        while (settled.size() != distances.length) {
+        while (settled.size() != distances.length) { // O((V + E) log V)
             // remove the minimum distance node from the priority queue  
             int u = pq.remove().node;
 
