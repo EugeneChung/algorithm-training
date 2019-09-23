@@ -30,16 +30,20 @@ public class 예산 {
 
             while (low <= high) {
                 int mid = (low + high) / 2;
+                // check 함수에서 상한액 조건에 따라 total 값을 리턴한다. 
                 long total = check(budgets, mid);
                 if (total == (long)M) {
                     return mid;
                 } else if (total < (long)M) {
+                    //현재 설정한 상한액으로 구한 total 값이 총 예산보다 작은 경우에는 상한액을 늘려서 시도하도록 세팅한다.
+                    //현재 설정한 상한액이 최적의 경우일 수도 있으므로 이를 정답 후보로 기록해둔다.
                     low = mid + 1;
                     if (maxTotal < total) {
                         maxTotal = total;
                         targetLimit = mid;
                     }
                 } else {
+                    //현재 설정한 상한액으로 구한 total 값이 총 예산을 넘어가므로 당연히 상한액을 줄여야 한다.
                     high = mid - 1;
                 }
             }
