@@ -45,28 +45,28 @@ public class Dijkstra {
         distances[src] = 0;
         while (settled.size() != distances.length) { // O((V + E) log V)
             // remove the minimum distance node from the priority queue  
-            int u = pq.remove().node;
+            int current = pq.remove().node;
 
             // adding the node whose distance is finalized 
-            settled.add(u);
+            settled.add(current);
 
-            traverseNeighbours(u);
+            traverseNeighbours(current);
         }
     }
 
     // Function to process all the neighbours of the passed node 
-    private void traverseNeighbours(int u) {
+    private void traverseNeighbours(int current) {
         // All the neighbors of v 
-        for (int i = 0; i < adj.get(u).size(); i++) {
-            Node v = adj.get(u).get(i);
+        for (int i = 0; i < adj.get(current).size(); i++) {
+            Node v = adj.get(current).get(i);
 
             // If current node hasn't already been processed 
             if (!settled.contains(v.node)) {
-                int newDistance = distances[u] + v.cost;
+                int newDistance = distances[current] + v.cost;
                 if (newDistance < distances[v.node]) {
                     // If new distance is cheaper in cost
                     distances[v.node] = newDistance;
-                    parents[v.node] = u;
+                    parents[v.node] = current;
                 }
 
                 // Add the current node to the queue 
