@@ -113,6 +113,16 @@ public class Algorithms {
         return max;
     }
 
+    public static int minInArray(int... array) {
+        int min = array[0];
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] < min) {
+                min = array[i];
+            }
+        }
+        return min;
+    }
+
     public static class Element implements Comparable<Element> {
         final int index;
         final int value;
