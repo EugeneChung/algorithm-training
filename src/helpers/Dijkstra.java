@@ -56,21 +56,21 @@ public class Dijkstra {
 
     // Function to process all the neighbours of the passed node 
     private void traverseNeighbours(int current) {
-        // All the neighbors of v 
+        // All the neighbors of current vertex(node) 
         for (int i = 0; i < adj.get(current).size(); i++) {
-            Node v = adj.get(current).get(i);
+            Node neighbor = adj.get(current).get(i);
 
             // If current node hasn't already been processed 
-            if (!settled.contains(v.node)) {
-                int newDistance = distances[current] + v.cost;
-                if (newDistance < distances[v.node]) {
+            if (!settled.contains(neighbor.node)) {
+                int newDistance = distances[current] + neighbor.cost;
+                if (newDistance < distances[neighbor.node]) {
                     // If new distance is cheaper in cost
-                    distances[v.node] = newDistance;
-                    parents[v.node] = current;
+                    distances[neighbor.node] = newDistance;
+                    parents[neighbor.node] = current;
                 }
 
                 // Add the current node to the queue 
-                pq.add(new Node(v.node, distances[v.node]));
+                pq.add(new Node(neighbor.node, distances[neighbor.node]));
             }
         }
     }
