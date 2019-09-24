@@ -57,9 +57,8 @@ public class Dijkstra {
     // Function to process all the neighbours of the passed node 
     private void traverseNeighbours(int current) {
         // All the neighbors of current vertex(node) 
-        for (int i = 0; i < adj.get(current).size(); i++) {
-            Node neighbor = adj.get(current).get(i);
-
+        List<Node> neigbors = adj.get(current);
+        for (Node neighbor : neigbors) {
             // If current node hasn't already been processed 
             if (!settled.contains(neighbor.node)) {
                 int newDistance = distances[current] + neighbor.cost;
