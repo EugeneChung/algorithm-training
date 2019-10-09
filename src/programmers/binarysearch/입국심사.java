@@ -8,7 +8,7 @@ public class 입국심사 {
     public static void main(String[] args) {
         int[] budgets = {120, 110, 140, 150}; int M = 485; //484
 
-        TestHelper.printSolution(new Solution().solution(budgets, M));
+        TestHelper.printSolution(new Solution().solution(M, budgets));
     }
 
     static class Solution {
