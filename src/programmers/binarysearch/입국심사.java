@@ -43,6 +43,7 @@ public class 입국심사 {
         }
 
         private boolean check(int[] times, long targetProcessingTime) {
+            return false;
         }
     }
 }
