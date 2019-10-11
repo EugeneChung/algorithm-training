@@ -12,6 +12,15 @@ public class TestHelper {
         printObject(message);
     }
 
+    public static void printMatrix(int[][] matrix) {
+        for (int[] rows : matrix) {
+            for (int col : rows) {
+                System.out.print(col + " ");
+            }
+            System.out.println();
+        }
+    }
+
     public static void printObject(Object message) {
         if (message.getClass().isArray()) {
             if (message instanceof int[])
