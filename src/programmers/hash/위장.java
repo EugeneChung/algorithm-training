@@ -25,15 +25,11 @@ public class 위장 {
                 clothesMap.put(nameAndType[1], ++namesCount);
             }
 
-            if (clothesMap.size() == 1) {
-                answer = clothes.length;
-            } else {
-                for (int count : clothesMap.values()) {
-                    if (answer == 0) answer = count + 1;
-                    else answer = answer * (count + 1);
-                }
-                answer -= 1;
+            for (int count : clothesMap.values()) {
+                if (answer == 0) answer = count + 1;
+                else answer = answer * (count + 1);
             }
+            answer -= 1;
 
             return answer;
         }
