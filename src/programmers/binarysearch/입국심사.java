@@ -2,48 +2,52 @@ package programmers.binarysearch;
 
 import helpers.TestHelper;
 
-import java.util.Arrays;
-
 public class 입국심사 {
     public static void main(String[] args) {
-        int[] budgets = {120, 110, 140, 150}; int M = 485; //484
+        int[] times = {7, 10}; int n = 6; //28
+//        int[] times = {1,2,2,2,100}; int n = 5;//2
+//        int[] times = {1,1,10}; int n = 5;
+//        int[] times = {3,4,10}; int n = 11;//18
 
-        TestHelper.printSolution(new Solution().solution(M, budgets));
+        TestHelper.printSolution(new Solution().solution(n, times));
     }
 
     static class Solution {
-        public static int minInArray(int... array) {
-            int min = array[0];
+        static int maxInArray(int... array) {
+            int max = array[0];
             for (int i = 1; i < array.length; i++) {
-                if (array[i] < min) {
-                    min = array[i];
+                if (array[i] > max) {
+                    max = array[i];
                 }
             }
-            return min;
+            return max;
         }
 
         public long solution(int n, int[] times) {
-            int minTime = minInArray(times);
-
-            // Budget 합이 총 예산을 넘는 경우에는 maxBudget을 최대 상한액으로 고려한 상태에서 최적의 상한액을 찾는 binary search 수행
-            long low = 0;
-            long high = (long)minTime * (long)n;
+            int maxTime = maxInArray(times);
+            long low = 1;
+            long high = (long)maxTime * (long)n;
             long minProcessingTime = 0;
 
             while (low <= high) {
+                long people = n;
                 long mid = (low + high) / 2;
-                if (check(times, mid)) {
-                    high = mid - 1;
-                    minProcessingTime = Math.min(minProcessingTime, mid);
-                } else {
+
+                for (int time : times) {
+                    people -= (mid / time);
+                    if (people <= 0) {
+                        break;
+                    }
+                }
+
+                if (people > 0) {
                     low = mid + 1;
+                } else {
+                    high = mid - 1;
+                    minProcessingTime = mid;
                 }
             }
             return minProcessingTime;
-        }
-
-        private boolean check(int[] times, long targetProcessingTime) {
-            return false;
         }
     }
 }
