@@ -3,89 +3,73 @@ package programmers.hash;
 import helpers.TestHelper;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class 베스트앨범 {
     public static void main(String[] args) {
-        String[] genres = {"classic", "pop", "classic", "classic", "pop"}; int[] plays = {500, 600, 150, 800, 2500}; //{4, 1, 3, 0} 
+//        String[] genres = {"classic", "pop", "classic", "classic", "pop"}; int[] plays = {500, 600, 150, 800, 2500}; //{4, 1, 3, 0} 
+        String[] genres = {"classic", "pop", "classic", "classic", "kpop"}; int[] plays = {500, 600, 500, 800, 2500}; //{4, 3, 0, 1} 
 
         Object solution = new Solution().solution(genres, plays);
         TestHelper.printSolution(solution);
     }
 
     static class Solution {
-        private static class PlayInfo implements Comparable<PlayInfo> {
-            int playCount;
-            int id;
+        class SongInfo implements Comparable<SongInfo> {
+            final int id;
+            final int playCount;
 
-            PlayInfo(int playCount, int id) {
-                this.playCount = playCount;
+            SongInfo(int id, int playCount) {
                 this.id = id;
+                this.playCount = playCount;
             }
 
             @Override
-            public int compareTo(PlayInfo o) {
-                if (o.playCount < this.playCount) return 1;
-                else if (o.playCount > this.playCount) return -1;
-                else {
-                    return Integer.compare(o.id, this.id);
+            public int compareTo(SongInfo o) {
+                int compare = Integer.compare(this.playCount, o.playCount);
+                if (compare == 0) {
+                    compare = Integer.compare(o.id, this.id);
                 }
+                return compare;
             }
         }
 
-        private static class GenreInfo implements Comparable<GenreInfo> {
-            long sum;
-            TreeSet<PlayInfo> playsSet = new TreeSet<>();
+        private class GenreInfo implements Comparable<GenreInfo> {
+            final TreeSet<SongInfo> sortedSongs = new TreeSet<>();
+            int totalPlayCount;
 
             @Override
             public int compareTo(GenreInfo o) {
-                if (o.sum > this.sum) return 1;
-                else if (o.sum == this.sum) return 0;
-                return -1;
-            }
-
-            void merge(int playCount, int id) {
-                this.sum += playCount;
-                playsSet.add(new PlayInfo(playCount, id));
+                return Integer.compare(totalPlayCount, o.totalPlayCount);
             }
         }
 
-        public int[] solution(String[] genres, final int[] plays) {
-            Map<String, GenreInfo> topGenres = new HashMap<>();
+        public int[] solution(String[] genres, int[] plays) {
+            List<Integer> answer = new ArrayList<>();
+            Map<String, GenreInfo> genreInfoMap = new HashMap<>();
 
             for (int i = 0; i < genres.length; i++) {
+                String genre = genres[i];
                 int play = plays[i];
-                GenreInfo genreInfo = topGenres.get(genres[i]);
-                if (genreInfo == null) {
-                    GenreInfo newInfo = new GenreInfo();
-                    newInfo.sum = play;
-                    newInfo.playsSet.add(new PlayInfo(play, i));
-                    topGenres.put(genres[i], newInfo);
-                } else {
-                    genreInfo.merge(play, i);
+                GenreInfo genreInfo = genreInfoMap.getOrDefault(genre, new GenreInfo());
+                if (genreInfo.totalPlayCount == 0) {
+                    genreInfoMap.put(genre, genreInfo);
+                }
+                genreInfo.totalPlayCount += play;
+                genreInfo.sortedSongs.add(new SongInfo(i, play));
+            }
+
+            TreeSet<GenreInfo> sortedGenresByTotalPlayCount = new TreeSet<>(genreInfoMap.values());
+            while (!sortedGenresByTotalPlayCount.isEmpty()) {
+                GenreInfo genreInfo = sortedGenresByTotalPlayCount.pollLast();
+                SongInfo songInfo = genreInfo.sortedSongs.pollLast();
+                answer.add(songInfo.id);
+                songInfo = genreInfo.sortedSongs.pollLast();
+                if (songInfo != null) {
+                    answer.add(songInfo.id);
                 }
             }
 
-            LinkedHashMap<String, GenreInfo> sortedMap =
-                topGenres.entrySet().stream().
-                    sorted(Map.Entry.comparingByValue()).
-                    collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (e1, e2) -> e1, LinkedHashMap::new));
-
-            List<Integer> answerList = new ArrayList<>();
-            for (Map.Entry<String, GenreInfo> entry : sortedMap.entrySet()) {
-                TreeSet<PlayInfo> playsSet = entry.getValue().playsSet;
-
-                PlayInfo playInfo = playsSet.pollLast();
-                assert playInfo != null;
-                answerList.add(playInfo.id);
-
-                playInfo = playsSet.pollLast();
-                if (playInfo != null) {
-                    answerList.add(playInfo.id);
-                }
-            }
-            return answerList.stream().mapToInt(i -> i).toArray();
+            return answer.stream().mapToInt(x -> x).toArray();
         }
     }
 }
